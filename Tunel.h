@@ -5,10 +5,10 @@
 class Tunel
 {
     private:
-        
+        int arbol;
     public:
         Tunel(){
-
+            arbol = 0;
         }
         
 };
