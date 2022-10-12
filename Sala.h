@@ -1,6 +1,7 @@
 #include "Tunel.h"
 #include "List.h"
 #include <iostream>
+#include <vector>
 
 
 #ifndef SALA 
@@ -20,6 +21,7 @@ class Sala {
 
     public:
         Sala() {
+            this->ifTunel = false;
             this->south = this->north = this->east = this->west = NULL;
         }
 
@@ -27,17 +29,17 @@ class Sala {
             Sala();
             switch (dire)
             {
-            case 0:
+            case 1:
                 this->south = adya;
                 adya->setNorth(this);
                 break;
 
-            case 1:
+            case 0:
                 this->north = adya;
                 adya->setSouth(this);
                 break;
 
-            case 2:
+            case 3:
                 this->east = adya;
                 adya->setWest(this);
                 break;
@@ -47,7 +49,6 @@ class Sala {
                 adya->setEast(this);
                 break;
             }
-            this->ifTunel = false;
         }
 
 
@@ -74,22 +75,22 @@ class Sala {
             this->west = pSala;
         }
 
-        List<int> available () {
-            List<int>* availablesN = new List<int>();
+        vector<int> available () {                           // [1,0,1,0]
+            vector<int> availablesN;
 
-            if (south) {
-                availablesN->add(0)
-            }
-            if (north) {
-                availablesN->add(1)
-            }
-            if (east) {
-                availablesN->add(2)
-            }
-            if (west) {
-                availablesN->add(3)
-            }
-            return availablesN
+            if (south == NULL) {
+                availablesN.push_back(0);
+            } 
+            if (north == NULL) {
+                availablesN.push_back(1);
+            } 
+            if (east == NULL) {
+                availablesN.push_back(2);
+            } 
+            if (west == NULL) {
+                availablesN.push_back(3);
+            } 
+            return availablesN;
         }
 
 

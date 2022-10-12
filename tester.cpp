@@ -1,4 +1,4 @@
-#include "Tunel.h"
+#include "Mina.h"
 #include "Sala.h"
 
 using namespace std;
@@ -6,9 +6,8 @@ using namespace std;
 int main()
 {
     
-    Sala* sala1 = new Sala();
-
-    Sala* sala2 = new Sala(sala1, 3);
+    Mina* mina1 = new Mina();
+    mina1->addToSalap();
 
 
     return 0;
