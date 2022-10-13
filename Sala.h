@@ -1,99 +1,118 @@
 #include "Tunel.h"
 #include "List.h"
 #include <iostream>
+#include <vector>
 
-
-#ifndef SALA 
+#ifndef SALA
 
 #define SALA 1
 
 using namespace std;
 
-class Sala {
-    private:
-        bool ifTunel;
-        Tunel *tunel;
-        Sala *south;
-        Sala *north;
-        Sala *west;
-        Sala *east;
+class Sala
+{
+private:
+    bool ifTunel; // Guarda si hay tunel
+    bool done;    // Guarda si ya se le agregaron salas
+    Tunel *tunel;
+    Sala *south;
+    Sala *north;
+    Sala *west;
+    Sala *east;
 
-    public:
-        Sala() {
-            this->south = this->north = this->east = this->west = NULL;
+public:
+    Sala()
+    {
+        this->ifTunel = false;
+        this->south = this->north = this->east = this->west = NULL;
+    }
+
+    Sala(Sala *adya, int dire) // Punteros con otra sala
+    {
+        Sala();
+        switch (dire)
+        {
+        case 1:
+            this->south = adya;
+            adya->setNorth(this);
+            break;
+
+        case 0:
+            this->north = adya;
+            adya->setSouth(this);
+            break;
+
+        case 3:
+            this->east = adya;
+            adya->setWest(this);
+            break;
+
+        default:
+            this->west = adya;
+            adya->setEast(this);
+            break;
         }
+    }
 
-        Sala(Sala* adya, int dire) {
-            Sala();
-            switch (dire)
-            {
-            case 0:
-                this->south = adya;
-                adya->setNorth(this);
-                break;
+    Sala(Sala *adya, int dire, Tunel *ptunel) // Punteros con sala y tunel
+    {
+        Sala(adya, dire);
+        this->ifTunel = true;
+        this->tunel = ptunel;
+    }
 
-            case 1:
-                this->north = adya;
-                adya->setSouth(this);
-                break;
+    void setSouth(Sala *pSala)
+    {
+        this->south = pSala;
+    }
 
-            case 2:
-                this->east = adya;
-                adya->setWest(this);
-                break;
+    void setNorth(Sala *pSala)
+    {
+        this->north = pSala;
+    }
 
-            default:
-                this->west = adya;
-                adya->setEast(this);
-                break;
-            }
-            this->ifTunel = false;
+    void setEast(Sala *pSala)
+    {
+        this->east = pSala;
+    }
+
+    void setWest(Sala *pSala)
+    {
+        this->west = pSala;
+    }
+
+    void setDone()
+    {
+        this->done = true;
+    }
+
+    bool getDone()
+    {
+        return done;
+    }
+
+    vector<int> available()
+    { // [1,0,1,0]
+        vector<int> availablesN;
+
+        if (south == NULL)
+        {
+            availablesN.push_back(0);
         }
-
-
-        Sala(Sala* adya, int dire, Tunel* ptunel) {
-            Sala(adya, dire);
-            this->ifTunel = true;
-            this->tunel = ptunel;
-
+        if (north == NULL)
+        {
+            availablesN.push_back(1);
         }
-
-        void setSouth (Sala* pSala) {
-            this->south = pSala;
+        if (east == NULL)
+        {
+            availablesN.push_back(2);
         }
-
-        void setNorth (Sala* pSala) {
-            this->north = pSala;
+        if (west == NULL)
+        {
+            availablesN.push_back(3);
         }
-
-        void setEast (Sala* pSala) {
-            this->east = pSala;
-        }
-
-        void setWest (Sala* pSala) {
-            this->west = pSala;
-        }
-
-        List<int> available () {
-            List<int>* availablesN = new List<int>();
-
-            if (south) {
-                availablesN->add(0)
-            }
-            if (north) {
-                availablesN->add(1)
-            }
-            if (east) {
-                availablesN->add(2)
-            }
-            if (west) {
-                availablesN->add(3)
-            }
-            return availablesN
-        }
-
-
-
+        return availablesN;
+    }
 };
 
 #endif

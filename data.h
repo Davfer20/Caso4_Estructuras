@@ -1,5 +1,5 @@
 class Data
 {
-    public:
-        int ID;
+public:
+    int ID;
 };
