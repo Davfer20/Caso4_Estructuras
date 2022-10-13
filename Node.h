@@ -1,6 +1,6 @@
 #include <iostream>
 
-#ifndef NODE 
+#ifndef NODE
 
 #define NODE 1
 
@@ -8,45 +8,52 @@ using namespace std;
 
 // 1. pasar este nodo a doblemente enlazado
 template <class T>
-class Node {
-    private:
-        T *data;
-        Node *next;
-        Node *prev; // esta linea se agrega para quiz #4 #5
-    
-    public:
-        Node() {
-            data = NULL;
-            next = NULL;
-            prev = NULL; // esta linea se agrega para quiz #4 #5
-        }
+class Node
+{
+private:
+    T *data;
+    Node *next;
+    Node *prev; // esta linea se agrega para quiz #4 #5
 
-        Node(T *pData) {
-            this->data = pData;
-            next = NULL;
-            prev = NULL;
-        }
+public:
+    Node()
+    {
+        data = NULL;
+        next = NULL;
+        prev = NULL; // esta linea se agrega para quiz #4 #5
+    }
 
-        T* getData() {
-            return data;
-        }
+    Node(T *pData)
+    {
+        this->data = pData;
+        next = NULL;
+        prev = NULL;
+    }
 
-        Node* getNext() {
-            return next;
-        }
+    T *getData()
+    {
+        return data;
+    }
 
-        void setNext(Node *pValue) {
-            this->next = pValue;
-        }
+    Node *getNext()
+    {
+        return next;
+    }
 
-        Node* getPrev() { // esta linea se agrega para quiz #4 #5
-            return prev;
-        }
+    void setNext(Node *pValue)
+    {
+        this->next = pValue;
+    }
 
-        void setPrev(Node *pValue) {// esta linea se agrega para quiz #4 #5
-            this->prev = pValue;
-        }
+    Node *getPrev()
+    { // esta linea se agrega para quiz #4 #5
+        return prev;
+    }
 
+    void setPrev(Node *pValue)
+    { // esta linea se agrega para quiz #4 #5
+        this->prev = pValue;
+    }
 };
 
 #endif
