@@ -1,22 +1,28 @@
 #include "Sala.h"
 #include "List.h"
-#include <vector>
+#include "Constants.h"
+
+#ifndef MINA
+
+#define MINA 1
 
 class Mina
 {
 private:
-    int salasT = 20;
+    int salasT;
     List<Sala>* Salas;
     //vector<Sala*> Salas;
     Sala *SalaP;
 
 public:
     Mina()
-    {
+    {   
+        this->Salas = new List<Sala>();
         Sala *Sprincipal = new Sala();
         this->SalaP = Sprincipal;
         //Salas.push_back(SalaP);
         this->Salas->add(SalaP);
+        this->salasT = 16;
         this->salasT -= 1;
     }
 
@@ -29,11 +35,11 @@ public:
 
         while (rCant != 0)
         {
-            Avail = SalaP->available();
-            int max = Avail.size(); // 0 SUR, 1 NORTE, 2 ESTE, 3 OESTE
+            Avail = SalaP->available();    // Puertas disponibles
+            int max = Avail.size(); 
             rDire = rand();
             rDire %= max;
-            rDire = Avail[rDire];
+            rDire = Avail[rDire]; // Se toma el index y se crea un nodo
             Sala *nuevaSala = new Sala(SalaP, rDire, randomTunel());
             //Salas.push_back(nuevaSala);
             Salas->add(nuevaSala);
@@ -45,6 +51,11 @@ public:
     int getsalasT()
     {
         return salasT;
+    }
+
+    List<Sala>* getSalasList()
+    {
+        return this->Salas;
     }
 
     int randomPuertas()
@@ -106,3 +117,5 @@ public:
         }
     }
 };
+
+#endif
