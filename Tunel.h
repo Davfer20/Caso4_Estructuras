@@ -1,8 +1,11 @@
+#include <iostream>
 #include "Chamber.h"
 
 #ifndef TUNEL
 
 #define TUNEL 1
+
+using namespace std;
 
 class Tunel
 {
@@ -16,7 +19,7 @@ public:
     }
 
     // Busca nodo de manera recursiva
-    Chamber *buscar(int potential, Chamber *raiz)
+    Chamber *find(int potential, Chamber *raiz)
     {
         if (raiz == NULL)
         {
@@ -28,11 +31,11 @@ public:
         }
         else if (raiz->getPot() < potential)
         {
-            return buscar(potential, raiz->getRight());
+            return find(potential, raiz->getRight());
         }
         else if (raiz->getPot() > potential)
         {
-            return buscar(potential, raiz->getLeft());
+            return find(potential, raiz->getLeft());
         }
     }
 
@@ -94,7 +97,7 @@ public:
         return aux;
     }
 
-    Chamber *insertarChamber(Chamber *newC, Chamber *subChamber)
+    Chamber *addChamber(Chamber *newC, Chamber *subChamber)
     {
         Chamber *newCPadre = subChamber;
 
@@ -106,7 +109,7 @@ public:
             }
             else
             {
-                subChamber->setLeft(this->insertarChamber(newC, subChamber->getLeft()));
+                subChamber->setLeft(this->addChamber(newC, subChamber->getLeft()));
 
                 int balance = this->obtenerDif(subChamber->getLeft()) - this->obtenerDif(subChamber->getRight());
 
@@ -130,7 +133,7 @@ public:
             }
             else
             {
-                subChamber->setRight(this->insertarChamber(newC, subChamber->getRight()));
+                subChamber->setRight(this->addChamber(newC, subChamber->getRight()));
 
                 int balance = this->obtenerDif(subChamber->getRight()) - this->obtenerDif(subChamber->getLeft());
 
@@ -165,9 +168,9 @@ public:
         return newCPadre;
     }
 
-    void insertar(int totdistance)
+    void add(Chamber* chamber)
     {
-        Chamber *newC = new Chamber(totdistance);
+        Chamber *newC = chamber;
 
         if (this->raiz == NULL)
         {
@@ -175,14 +178,30 @@ public:
         }
         else
         {
-            this->raiz = this->insertarChamber(newC, raiz);
+            this->raiz = this->addChamber(newC, raiz);
         }
+    }
+
+    void generateTunel() {
+        int maxDis = 720;
+        
     }
 
     Chamber *getRaiz()
     {
         return this->raiz;
     }
+
+    void postOrden(Chamber *chamber)
+    {
+        if (chamber != NULL)
+        {
+            this->postOrden(chamber->getLeft());
+            this->postOrden(chamber->getRight());
+            cout << chamber->getPot() << ", ";
+        }
+    }
+
 };
 
 #endif

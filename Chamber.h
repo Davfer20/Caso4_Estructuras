@@ -9,11 +9,12 @@ class Chamber
 private:
     int potential;
     int distance;
-    int totdis;
+    int totDis;
     int mineral;
     int dif; // Altura right - Altura left
     Chamber *left;
     Chamber *right;
+    bool valid = false;
 
 public:
     Chamber()
@@ -27,13 +28,19 @@ public:
         this->right = NULL;
     }
 
+    // Distancia random entre 10 a 80 pero que el total no supere
     int getRandDistance(int TotDis)
     {
         int resul = rand() % 70 + 10;
         if (TotDis + resul > 710)
         {
             resul = (rand() % (710 - TotDis)) + 10;
+
+        } else if (TotDis == 720)
+        {
+            resul = -1;
         }
+
         return resul;
     }
     int getRandMineral()
@@ -43,8 +50,14 @@ public:
 
     Chamber(int pTotDis) // 700
     {
-        this->totdis = pTotDis;
         this->distance = getRandDistance(pTotDis);
+
+        if (this->distance != -1)
+        {
+            this->valid = true;
+        }
+
+        this->totDis = pTotDis + distance;
         this->mineral = getRandMineral();
         this->potential = this->distance * this->mineral;
         this->dif = 0;
@@ -57,17 +70,22 @@ public:
         return this->potential;
     }
 
-    Chamber* getLeft()
+    int getTotDis()
+    {
+        return this->totDis;
+    }
+
+    Chamber *getLeft()
     {
         return this->left;
     }
 
-    void setLeft(Chamber* Pchamber)
+    void setLeft(Chamber *Pchamber)
     {
         this->left = Pchamber;
     }
 
-    Chamber* getRight()
+    Chamber *getRight()
     {
         return this->right;
     }
