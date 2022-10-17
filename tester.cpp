@@ -5,19 +5,16 @@
 
 using namespace std;
 
-
-
 int main()
 {
-    
+
     Mina *mina1 = new Mina();
     mina1->addToSalap();
     mina1->addSalasTotal();
-    Miner* minero1 = new Miner(0, 0, mina1);
+    Miner *minero1 = new Miner(0, 0, mina1);
     minero1->start();
-    Miner* minero2 = new Miner(1, 0, mina1);
+    Miner *minero2 = new Miner(1, 0, mina1);
     minero2->start();
-
 
     return 0;
 }
