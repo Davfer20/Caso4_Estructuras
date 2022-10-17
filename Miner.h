@@ -11,7 +11,7 @@
 
 using namespace std; 
 
-struct timespec sec1 = {0, 100}; // Pausa de un segundo 
+struct timespec sec1 = {0, 5}; // Pausa de un segundo 
 
 class Miner
 {
@@ -63,6 +63,7 @@ class Miner
         }
 
         void mining() {
+            srand(this->Mtype);
             while (true) {
                 pthread_delay_np(&sec1);
                 cout << "El " << this->getMname() << " está en la sala " << currentSala->getID() << endl;
@@ -82,9 +83,6 @@ class Miner
             cout << "El " << this->getMname() << " entró al tunel de la sala " << currentSala->getID() << endl; 
         }
 
-        void start () {
-            mining();
-        }
 };
 
 #endif
