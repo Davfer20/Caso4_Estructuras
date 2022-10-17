@@ -1,7 +1,9 @@
 #include "Tunel.h"
 #include "List.h"
+#include "Singleton.h"
 #include <iostream>
 #include <vector>
+
 
 #ifndef SALA
 
@@ -9,75 +11,53 @@
 
 using namespace std;
 
+Singleton *Singleton::instance = 0;
+
 class Sala
 {
 private:
     bool ifTunel; // Guarda si hay tunel
     bool done;    // Guarda si ya se le agregaron salas
+    int ID;
     Tunel *tunel;
-    Sala *south;
-    Sala *north;
-    Sala *west;
-    Sala *east;
+    Sala *north; // 0
+    Sala *south; // 1
+    Sala *west; // 2
+    Sala *east; // 3
 
 public:
     Sala()
     {
         this->ifTunel = false;
         this->south = this->north = this->east = this->west = NULL;
-    }
-
-    Sala(Sala *adya, int dire) // Punteros con otra sala
-    {
-        this->ifTunel = false;
-        this->south = this->north = this->east = this->west = NULL;
-        switch (dire)
-        {
-        case 1:
-            this->south = adya;
-            adya->setNorth(this);
-            break;
-
-        case 0:
-            this->north = adya;
-            adya->setSouth(this);
-            break;
-
-        case 3:
-            this->east = adya;
-            adya->setWest(this);
-            break;
-
-        default:
-            this->west = adya;
-            adya->setEast(this);
-            break;
-        }
+        this->ID = 0;
     }
 
     Sala(Sala *adya, int dire, bool pifTunel) // Punteros con sala y tunel
         {
         this->south = this->north = this->east = this->west = NULL;
-
+        Singleton *var = var->getInstance();
+        this->ID = var->getData();
+        var->IncData();
         switch (dire) {
-        case 1:
+        case 0:
             this->south = adya;
             adya->setNorth(this);
             break;
 
-        case 0:
+        case 1:
             this->north = adya;
             adya->setSouth(this);
             break;
 
         case 3:
-            this->east = adya;
-            adya->setWest(this);
+            this->west = adya;
+            adya->setEast(this);
             break;
 
         default:
-            this->west = adya;
-            adya->setEast(this);
+            this->east = adya;
+            adya->setWest(this);
             break;
         };
 
@@ -115,28 +95,83 @@ public:
         this->done = true;
     }
 
+    bool getIfTunel()
+    {
+        return this->ifTunel;
+    }    
+
+    Sala* getSalaDir(int pDir) {
+        Sala* resul;
+        switch (pDir)
+        {
+        case 0:
+            resul = north;
+            break;
+
+        case 1:
+            resul = south;
+            break;
+
+        case 3:
+            resul = east;
+            break;
+        default:
+            resul = west;
+            break;
+        }
+        return resul;
+    }
+
+    int getID() {
+        return this->ID;
+    }
+
+
     bool getDone()
     {
         return done;
     }
 
     vector<int> available()
-    { // [1,0,1,0]
+    { 
         vector<int> availablesN;
 
-        if (this->south == NULL)
+        if (this->north == NULL)
         {
             availablesN.push_back(0);
         }
-        if (this->north == NULL)
+        if (this->south == NULL)
         {
             availablesN.push_back(1);
         }
-        if (this->east == NULL)
+        if (this->west == NULL)
         {
             availablesN.push_back(2);
         }
-        if (this->west == NULL)
+        if (this->east == NULL)
+        {
+            availablesN.push_back(3);
+        }
+        return availablesN;
+    }
+
+    vector<int> availablePaths()
+    { // [1,0,1,0]
+        vector<int> availablesN;
+
+        if (this->north != NULL)
+        {
+            availablesN.push_back(0);
+        }
+        if (this->south != NULL)
+        {
+            availablesN.push_back(1);
+        }
+        if (this->west != NULL)
+        {
+            availablesN.push_back(2);
+        }
+        if (this->east != NULL)
         {
             availablesN.push_back(3);
         }
