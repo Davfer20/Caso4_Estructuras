@@ -81,8 +81,7 @@ class Miner
             }
             cout << "El " << this->getMname() << " entró al tunel de la sala " << currentSala->getID() << endl; 
         }
- Miner* minero1 = new Miner(0, 0, mina1);
-    minero1->start();
+
         void start () {
             mining();
         }
