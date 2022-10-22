@@ -65,7 +65,7 @@ public:
             this->ifTunel = false;
         } else {
             this->ifTunel = true;
-            // Crear tunel 
+            this->tunel = new Tunel(this->ID);   
         }
     }
 

@@ -9,80 +9,111 @@
 
 #define MINER 1
 
-using namespace std; 
+using namespace std;
 
-struct timespec sec1 = {0, 5}; // Pausa de un segundo 
+struct timespec sec1 = {1, 0}; // Pausa de un segundo
 
 class Miner
 {
-    private:
-        Sala* currentSala;
-        vector<int> disPaths;
-        string action;
-        string Mname;
-        Mina* currentMina;
-        int Mtype; // 0 - Explorer, 1 - Carrier, 2 - Driller
-        int Mstrat;
-        int inventory;
-        int cap;
-        int speed;
-        int lastDir;
+private:
+    Sala *currentSala;
+    vector<int> disPaths;
+    string action;
+    string Mname;
+    Mina *currentMina;
+    int Mtype; // 0 - Explorer, 1 - Carrier, 2 - Driller
+    int Mstrat;
+    int inventory;
+    int cap;
+    int speed;
+    int lastDir;
+    int state; // 0 sala, 1 tunel
 
+public:
+    Miner(int PmType, int PmStrat, Mina *Pmina)
+    {
+        this->currentMina = Pmina;
+        this->currentSala = Pmina->getSalasList()->find(0);
+        this->inventory = 0;
+        this->Mstrat = PmStrat;
+        switch (PmType)
+        {
+        case 0:
+            this->Mtype = 0;
+            this->Mname = "Explorer";
+            this->speed = 20;
+            this->cap = 8;
+            break;
+        case 1:
+            this->Mtype = 1;
+            this->Mname = "Carrier";
+            this->speed = 10;
+            this->cap = 40;
+            break;
 
-    public:
-        Miner(int PmType, int PmStrat, Mina* Pmina) { 
-            this->currentMina = Pmina;
-            this->currentSala = Pmina->getSalasList()->find(0);
+        default:
+            this->Mtype = 2;
+            this->Mname = "Driller";
+            this->speed = 7;
+            this->cap = 15;
+            break;
+        }
+    }
+    string getMname()
+    {
+        return this->Mname;
+    }
 
-            this->Mstrat = PmStrat;
-            switch (PmType)
+    string getAction()
+    {
+        return this->action;
+    }
+
+    int getInventory()
+    {
+        return this->inventory;
+    }
+
+    int getState()
+    {
+        return this->state;
+    }
+
+    Sala *getSala()
+    {
+        return this->currentSala;
+    }
+
+    void mining()
+    {
+        if (!state)
+        {
+            this->action = "Explorando la sala " + to_string(currentSala->getID());
+            if (currentSala->getIfTunel() && !(rand() % 3))
             {
-            case 0:
-                this->Mtype = 0;
-                this->Mname = "Explorer";
-                this->speed = 20;
-                this->cap = 8;
-                break;
-            case 1:
-                this->Mtype = 1;
-                this->Mname = "Carrier";
-                this->speed = 10;
-                this->cap = 40;
-                break;
-            
-            default:
-                this->Mtype = 2;
-                this->Mname = "Driller";
-                this->speed = 7;
-                this->cap = 15;
-                break;
+                this->action = "Explorando el tunel " + to_string(currentSala->getID());
+                this->state = 1;
             }
-        }
-        string getMname() {
-            return this->Mname;
-        }
-
-        void mining() {
-            srand(this->Mtype);
-            while (true) {
-                pthread_delay_np(&sec1);
-                cout << "El " << this->getMname() << " está en la sala " << currentSala->getID() << endl;
-                if (currentSala->getIfTunel() && !(rand() % 3))
-                {
-                    break;   
-                }
-                
+            else
+            {
                 disPaths = currentSala->availablePaths();
                 int rDire;
-                int max = disPaths.size();  
+                int max = disPaths.size();
                 rDire = rand();
-                rDire %= max;  
+                rDire %= max;
                 rDire = disPaths[rDire];
                 this->currentSala = currentSala->getSalaDir(rDire);
             }
-            cout << "El " << this->getMname() << " entró al tunel de la sala " << currentSala->getID() << endl; 
+        } else if (state == 1)
+        {
+            // logica de los tuneles
+            // Recorrer
+            // Strat - al volver a la camara buscar otra?
+            // Extraer 
+            // Inhabilitar
         }
-
+        
+    }
 };
 
 #endif

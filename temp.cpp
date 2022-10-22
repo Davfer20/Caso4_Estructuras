@@ -209,7 +209,7 @@ int main () {
     arbol->insertar(17);
     arbol->insertar(16);
 
-    arbol->postOrden(arbol->obtenerRaiz());
+    arbol->inOrden(arbol->obtenerRaiz());
 
     return 0;
 }

@@ -17,18 +17,34 @@ int main()
     Miner *minero2 = new Miner(1, 0, mina1);
     Miner *minero3 = new Miner(2, 0, mina1);
 
-    thread t1(&Miner::mining, minero1);
-    t1.detach();
-    thread t2(&Miner::mining, minero2);
-    t2.detach();
-    thread t3(&Miner::mining, minero3);
-    t3.detach();
+    vector<Miner*> mineros;
+    mineros.push_back(minero1);
+    mineros.push_back(minero2);
+    mineros.push_back(minero3);
 
     int count = 0;
     while (count < 90)
     {
+        srand(time(0));
+        cout << "Tiempo restante: " << 90 - count << endl;
+        cout << "Material recogido: " << endl;
+        for (int i = 0; i < mineros.size(); i++)
+        {
+            Miner *Nminer = mineros[i];
+            if (Nminer->getState() != 1)
+            {
+                Nminer->exploring();
+            }
+            cout << "===========================================" << endl;
+            cout << "Minero " << i + 1 << ": " << Nminer->getMname();
+            cout << "           ";
+            cout << "Inventario: " << Nminer->getInventory() << endl;
+            cout << "Estado: " << Nminer->getAction() << endl;
+        }
+        cout << endl << endl << endl << endl << endl << endl;
         count += 1;
         pthread_delay_np(&sec1);
+
     }
     
 
