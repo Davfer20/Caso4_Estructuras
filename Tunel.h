@@ -29,6 +29,10 @@ public:
             chambers->countSearh(chamber1->getPot(), chambers->getRaiz());
             chamber1->setDeep(chambers->getCount());
         }
+
+    }
+    NodeAVL<Chamber>* getNodeRaiz() {
+        return this->raiz;
     }
 };
 

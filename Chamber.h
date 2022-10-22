@@ -37,11 +37,24 @@ public:
     {
         return this->potential;
     }
+
+    bool ifValid()
+    {
+        return this->valid;
+    }
     int getDeep()
     {
         return this->deep;
     }
+    int getDistance()
+    {
+        return this->distance;
+    }
     void setDeep(int pDeep)
+    {
+        this->deep = pDeep;
+    }
+    void set(int pDeep)
     {
         this->deep = pDeep;
     }
