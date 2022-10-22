@@ -1,8 +1,10 @@
 #include "Sala.h"
 #include "Mina.h"
+#include "NodeAVL.h"
 #include "List.h"
+#include "Singleton.h"
+#include "Chamber.h"
 #include <string.h>
-#include <thread>
 #include <iostream>
 
 #ifndef MINER
@@ -17,6 +19,8 @@ class Miner
 {
 private:
     Sala *currentSala;
+    NodeAVL<Chamber> *currentChamberNode;
+    Chamber* currentChamber;
     vector<int> disPaths;
     string action;
     string Mname;
@@ -28,6 +32,8 @@ private:
     int speed;
     int lastDir;
     int state; // 0 sala, 1 tunel
+    int deepdis;
+    int cooldown;
 
 public:
     Miner(int PmType, int PmStrat, Mina *Pmina)
@@ -84,35 +90,80 @@ public:
         return this->currentSala;
     }
 
-    void mining()
+    void exploring()  // State 0
     {
-        if (!state)
+        this->action = "Explorando la sala " + to_string(currentSala->getID());
+        if (currentSala->getIfTunel() && !(rand() % 3))
         {
-            this->action = "Explorando la sala " + to_string(currentSala->getID());
-            if (currentSala->getIfTunel() && !(rand() % 3))
-            {
-                this->action = "Explorando el tunel " + to_string(currentSala->getID());
-                this->state = 1;
-            }
-            else
-            {
-                disPaths = currentSala->availablePaths();
-                int rDire;
-                int max = disPaths.size();
-                rDire = rand();
-                rDire %= max;
-                rDire = disPaths[rDire];
-                this->currentSala = currentSala->getSalaDir(rDire);
-            }
-        } else if (state == 1)
-        {
-            // logica de los tuneles
-            // Recorrer
-            // Strat - al volver a la camara buscar otra?
-            // Extraer 
-            // Inhabilitar
+            this->state = 1;
+            this->currentChamberNode = currentSala->getTunel()->getNodeRaiz();
+            this->deepdis = 0;
         }
+        else
+        {
+            disPaths = currentSala->availablePaths();
+            int rDire;
+            int max = disPaths.size();
+            rDire = rand();
+            rDire %= max;
+            rDire = disPaths[rDire];
+            this->currentSala = currentSala->getSalaDir(rDire);
+            
+        }
+    }
+    void mining() // State 1
+    {
+        if (!cooldown)
+        {
+            cooldown -= 1;
+            return;
+        }
+        //Singleton *var = var->getInstance();
+        //var->addLoad(5);
+        currentChamber = currentChamberNode->content;
+        this->deepdis += currentChamber->getDistance();
+        this->action = "Explorando el tunel " + to_string(currentSala->getID()) + to_string(currentChamber->getDeep());
+        if (currentChamber->getDeep() == 1 || rand() % 2) // Posibilidad de seguir adentrandose 
+        {
+            int distance;
+            int path = rand() % 2;
+            if ((currentChamberNode->derecho != NULL || currentChamberNode->derecho->content->ifValid()) && path)
+            {
+                currentChamberNode = currentChamberNode->derecho;
+                distance = currentChamber->getDistance();
+            } else if ((currentChamberNode->izquierdo != NULL || currentChamberNode->derecho->content->ifValid()) && !path)
+            {
+                currentChamberNode = currentChamberNode->izquierdo;
+                distance = currentChamber->getDistance();
+            } else { // Devolverse al inicio si ya no hay camino
+                this->currentChamberNode = currentSala->getTunel()->getNodeRaiz();
+                distance = deepdis;
+                deepdis = 0;
+                this->action = "Volviendo a la sala...";
+            }
+            currentChamber = currentChamberNode->content;
+            cooldown = distance / this->speed; 
+
+        } // mina
         
+    }
+
+    void unloading() // State 2
+    {
+        this->action = "Descargando inventario " + to_string(currentSala->getID());
+        Singleton *var = var->getInstance();
+        var->addLoad(this->inventory);
+        this->inventory = 0;
+
+        this->state = 0;
+        if (rand() % 2)
+        {
+            this->state = 1;
+        }
+    }
+
+    void death() // State 3 x_x
+    {
     }
 };
 

@@ -1,6 +1,7 @@
 #include "Mina.h"
 #include "Sala.h"
 #include "Miner.h"
+#include "Singleton.h"
 #include <thread>
 
 using namespace std;
@@ -9,7 +10,7 @@ struct timespec sec2 = {1, 0}; // Pausa de un segundo
 
 int main()
 {
-
+    Singleton *var = var->getInstance();
     Mina *mina1 = new Mina();
     mina1->addToSalap();
     mina1->addSalasTotal();
@@ -27,7 +28,7 @@ int main()
     {
         srand(time(0));
         cout << "Tiempo restante: " << 90 - count << endl;
-        cout << "Material recogido: " << endl;
+        cout << "Material recogido: " << var->getLoad() <<endl;
         for (int i = 0; i < mineros.size(); i++)
         {
             Miner *Nminer = mineros[i];
@@ -35,6 +36,22 @@ int main()
             {
                 Nminer->exploring();
             }
+            switch (Nminer->getState())
+            {
+            case 0:
+                Nminer->exploring();
+                break;
+            case 1:
+                Nminer->mining();
+                break;
+            case 2:
+                Nminer->unloading();
+                break;
+            default:
+                Nminer->death();
+                break;
+            }
+            
             cout << "===========================================" << endl;
             cout << "Minero " << i + 1 << ": " << Nminer->getMname();
             cout << "           ";

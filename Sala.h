@@ -98,7 +98,12 @@ public:
     bool getIfTunel()
     {
         return this->ifTunel;
-    }    
+    }
+
+    Tunel* getTunel()
+    {
+        return this->tunel;
+    }
 
     Sala* getSalaDir(int pDir) {
         Sala* resul;
