@@ -33,7 +33,7 @@ int main()
             Miner *Nminer = mineros[i];
             if (Nminer->getState() != 1)
             {
-                Nminer->mining();
+                Nminer->exploring();
             }
             cout << "===========================================" << endl;
             cout << "Minero " << i + 1 << ": " << Nminer->getMname();

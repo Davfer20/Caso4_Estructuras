@@ -58,7 +58,6 @@ public:
             this->cap = 15;
             break;
         }
-
     }
     string getMname()
     {
@@ -80,26 +79,38 @@ public:
         return this->state;
     }
 
-    Sala* getSala()
+    Sala *getSala()
     {
         return this->currentSala;
     }
 
     void mining()
     {
-        this->action = "Explorando la sala " + to_string(currentSala->getID());
-        if (currentSala->getIfTunel() && !(rand() % 3))
+        if (!state)
         {
-            this->action = "Explorando el tunel " + to_string(currentSala->getID());
-            this->state = 1;
-        } else {
-            disPaths = currentSala->availablePaths();
-            int rDire;
-            int max = disPaths.size();
-            rDire = rand();
-            rDire %= max;
-            rDire = disPaths[rDire];
-            this->currentSala = currentSala->getSalaDir(rDire);
+            this->action = "Explorando la sala " + to_string(currentSala->getID());
+            if (currentSala->getIfTunel() && !(rand() % 3))
+            {
+                this->action = "Explorando el tunel " + to_string(currentSala->getID());
+                this->state = 1;
+            }
+            else
+            {
+                disPaths = currentSala->availablePaths();
+                int rDire;
+                int max = disPaths.size();
+                rDire = rand();
+                rDire %= max;
+                rDire = disPaths[rDire];
+                this->currentSala = currentSala->getSalaDir(rDire);
+            }
+        } else if (state == 1)
+        {
+            // logica de los tuneles
+            // Recorrer
+            // Strat - al volver a la camara buscar otra?
+            // Extraer 
+            // Inhabilitar
         }
         
     }
