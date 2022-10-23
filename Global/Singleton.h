@@ -6,32 +6,41 @@
 
 using namespace std;
 
-class Singleton {
+// Patron Singleton empleado para variables globales
+class Singleton
+{
    static Singleton *instance;
    int salaID;
    int load;
 
    // Private constructor so that no objects can be created.
-   Singleton() {
-      salaID = 1;
-      load = 0; 
+   Singleton()
+   {
+      salaID = 1; // Contador de ID de las salas
+      load = 0;   // Contador del mineral recogido
    }
 
-   public:
-   static Singleton *getInstance() {
+public:
+   static Singleton *getInstance()
+   {
       if (!instance)
-      instance = new Singleton;
+         instance = new Singleton;
       return instance;
    }
 
-   int getData() {
+   // Retorna el ID actual
+   int getData()
+   {
       return this->salaID;
    }
-   void IncData() {
+   // Incrementa el ID
+   void IncData()
+   {
       this->salaID += 1;
    }
 
-   void addLoad(int pload) {
+   void addLoad(int pload)
+   {
       this->load += pload;
    }
 

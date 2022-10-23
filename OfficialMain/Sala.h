@@ -1,9 +1,8 @@
 #include "Tunel.h"
-#include "List.h"
-#include "Singleton.h"
+#include "..\Generics\List.h"
+#include "..\Global\Singleton.h"
 #include <iostream>
 #include <vector>
-
 
 #ifndef SALA
 
@@ -17,15 +16,16 @@ class Sala
 {
 private:
     bool ifTunel; // Guarda si hay tunel
+    Tunel *tunel; // * Tunel asociado a la Sala
     bool done;    // Guarda si ya se le agregaron salas
     int ID;
-    Tunel *tunel;
     Sala *north; // 0
     Sala *south; // 1
-    Sala *west; // 2
-    Sala *east; // 3
+    Sala *west;  // 2
+    Sala *east;  // 3
 
 public:
+    // Contructor de Sala con adyacencias en NULL
     Sala()
     {
         this->ifTunel = false;
@@ -33,13 +33,17 @@ public:
         this->ID = 0;
     }
 
-    Sala(Sala *adya, int dire, bool pifTunel) // Punteros con sala y tunel
-        {
+    // Contructor de Sala con adyacencia a otra Sala
+    Sala(Sala *adya, int dire, bool pifTunel)
+    {
         this->south = this->north = this->east = this->west = NULL;
         Singleton *var = var->getInstance();
         this->ID = var->getData();
         var->IncData();
-        switch (dire) {
+
+        // Identificacion de la direccion de la adyacencia
+        switch (dire)
+        {
         case 0:
             this->south = adya;
             adya->setNorth(this);
@@ -61,30 +65,37 @@ public:
             break;
         };
 
-        if (!pifTunel) {
+        // Asignacion del tunel
+        if (!pifTunel)
+        {
             this->ifTunel = false;
-        } else {
+        }
+        else
+        {
             this->ifTunel = true;
-            this->tunel = new Tunel(this->ID);   
+            this->tunel = new Tunel(this->ID);
         }
     }
 
-
+    // Retorna un Ptr a la sala al South
     void setSouth(Sala *pSala)
     {
         this->south = pSala;
     }
 
+    // Retorna un Ptr a la sala al North
     void setNorth(Sala *pSala)
     {
         this->north = pSala;
     }
 
+    // Retorna un Ptr a la sala al East
     void setEast(Sala *pSala)
     {
         this->east = pSala;
     }
 
+    // Retorna un Ptr a la sala al West
     void setWest(Sala *pSala)
     {
         this->west = pSala;
@@ -95,18 +106,30 @@ public:
         this->done = true;
     }
 
+    int getID()
+    {
+        return this->ID;
+    }
+    
+    bool getDone()
+    {
+        return done;
+    }
+
     bool getIfTunel()
     {
         return this->ifTunel;
     }
 
-    Tunel* getTunel()
+    Tunel *getTunel()
     {
         return this->tunel;
     }
 
-    Sala* getSalaDir(int pDir) {
-        Sala* resul;
+    // Retorna la Sala de la direccion dada en forma de Int
+    Sala *getSalaDir(int pDir)
+    {
+        Sala *resul;
         switch (pDir)
         {
         case 0:
@@ -127,18 +150,9 @@ public:
         return resul;
     }
 
-    int getID() {
-        return this->ID;
-    }
-
-
-    bool getDone()
-    {
-        return done;
-    }
-
+    // Retorna un vector de las Adyacencias disponibles para asignar conexion con otra Sala
     vector<int> available()
-    { 
+    {
         vector<int> availablesN;
 
         if (this->north == NULL)
@@ -160,6 +174,7 @@ public:
         return availablesN;
     }
 
+    // Retorna un vector con los posibles caminos que puede tomar el IMiner
     vector<int> availablePaths()
     { // [1,0,1,0]
         vector<int> availablesN;
