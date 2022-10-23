@@ -50,10 +50,6 @@ public:
     // Retorna si la sala es valida
     bool ifValid()
     {
-        if (this == NULL)
-        {
-            return false;
-        }
         return this->valid;
     }
 

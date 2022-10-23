@@ -12,13 +12,10 @@ public:
     Carrier(vector<IStrat> pmStrat, Mina *Pmina) : IMiner(pmStrat, Pmina)
     {
         this->Mname = "Carrier";
-        this->speed = 7;
-        this->cap = 15;
+        this->speed = 10;
+        this->cap = 40;
     }
 
-    void mining() override
-    {
-    }
 };
 
 #endif

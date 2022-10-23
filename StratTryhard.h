@@ -40,7 +40,16 @@ public:
     }
     bool choosePath(int Opcion)
     {
+        {
+        if (Opcion == 3)
+        {
+            Opcion = 1;
+        }
+
+        return Opcion;
     }
+    }
+
     string getName()
     {
         return "Tryhard strategy";
