@@ -1,8 +1,8 @@
 #include "Sala.h"
 #include "Mina.h"
-#include "NodeAVL.h"
-#include "List.h"
-#include "Singleton.h"
+#include "..\Generics\NodeAVL.h"
+#include "..\Generics\List.h"
+#include "..\Global\Singleton.h"
 #include "Chamber.h"
 #include <string.h>
 #include <iostream>
@@ -13,8 +13,7 @@
 
 using namespace std;
 
-struct timespec sec1 = {1, 0}; // Pausa de un segundo
-
+// Clase miner propensa a ser inutilizada 
 class Miner
 {
 private:
@@ -31,7 +30,7 @@ private:
     int cap;
     int speed;
     int lastDir;
-    int state; // 0 sala, 1 tunel
+    int state; // 0 sala, 1 tunel, 2 descarga
     int deepdis;
     int cooldown;
 
@@ -42,6 +41,9 @@ public:
         this->currentSala = Pmina->getSalasList()->find(0);
         this->inventory = 0;
         this->Mstrat = PmStrat;
+        this->state = 0;
+        this->cooldown = 0;
+        this->currentChamber = NULL;
         switch (PmType)
         {
         case 0:
@@ -85,6 +87,11 @@ public:
         return this->state;
     }
 
+    int getCap()
+    {
+        return this->cap;
+    }
+
     Sala *getSala()
     {
         return this->currentSala;
@@ -113,7 +120,7 @@ public:
     }
     void mining() // State 1
     {
-        if (!cooldown)
+        if (cooldown != 0)
         {
             cooldown -= 1;
             return;
@@ -122,48 +129,86 @@ public:
         //var->addLoad(5);
         currentChamber = currentChamberNode->content;
         this->deepdis += currentChamber->getDistance();
-        this->action = "Explorando el tunel " + to_string(currentSala->getID()) + to_string(currentChamber->getDeep());
-        if (currentChamber->getDeep() == 1 || rand() % 2) // Posibilidad de seguir adentrandose 
+        currentSala->getTunel()->getChambers()->countSearh(currentChamber->getPot(), currentSala->getTunel()->getNodeRaiz());
+        int deep =  currentSala->getTunel()->getChambers()->getCount();
+        int distance;
+        this->action = "Explorando el tunel " + to_string(currentSala->getID()) + ", prufundidad: " + to_string(deep);
+        if (deep == 1 || rand() % 2) // Posibilidad de seguir adentrandose
         {
-            int distance;
+            
             int path = rand() % 2;
-            if ((currentChamberNode->derecho != NULL || currentChamberNode->derecho->content->ifValid()) && path)
+            if ((currentChamberNode->derecho != NULL) && path)
             {
-                currentChamberNode = currentChamberNode->derecho;
-                distance = currentChamber->getDistance();
-            } else if ((currentChamberNode->izquierdo != NULL || currentChamberNode->derecho->content->ifValid()) && !path)
+                if (currentChamberNode->derecho->content->ifValid())
+                {
+                    currentChamberNode = currentChamberNode->derecho;
+                    distance = currentChamber->getDistance();
+                }
+                
+            } else if ((currentChamberNode->izquierdo != NULL ) && !path)
             {
-                currentChamberNode = currentChamberNode->izquierdo;
-                distance = currentChamber->getDistance();
+                if (currentChamberNode->derecho->content->ifValid())
+                {
+                    currentChamberNode = currentChamberNode->izquierdo;
+                    distance = currentChamber->getDistance();
+                }
             } else { // Devolverse al inicio si ya no hay camino
                 this->currentChamberNode = currentSala->getTunel()->getNodeRaiz();
                 distance = deepdis;
                 deepdis = 0;
                 this->action = "Volviendo a la sala...";
+                this->state = 2;
             }
-            currentChamber = currentChamberNode->content;
             cooldown = distance / this->speed; 
 
-        } // mina
+        } else
+        {
+            while (inventory != cap && currentChamber->ifValid())
+            {
+                this->inventory += currentChamber->pickMineral();
+            }
+            this->currentChamberNode = currentSala->getTunel()->getNodeRaiz();
+            distance = deepdis;
+            deepdis = 0;
+            this->action = "Volviendo a la sala con material...";
+            cooldown = distance / this->speed;
+            this->state = 2;
+        }
         
     }
 
     void unloading() // State 2
     {
+        if (cooldown != 0)
+        {
+            cooldown -= 1;
+            return;
+        }
+
         this->action = "Descargando inventario " + to_string(currentSala->getID());
         Singleton *var = var->getInstance();
         var->addLoad(this->inventory);
         this->inventory = 0;
 
-        this->state = 0;
+        this->state = 1;
         if (rand() % 2)
         {
-            this->state = 1;
+            this->currentChamber = NULL;
+            this->state = 0;
         }
     }
 
     void death() // State 3 x_x
     {
+    }
+
+    string getMrlCurrentChamb() {   // 20/14
+        string resul = "Ø";
+        if (this->currentChamber != NULL)
+        {
+            resul = this->currentChamber->getMaterial();
+        }
+        return resul;
     }
 };
 
