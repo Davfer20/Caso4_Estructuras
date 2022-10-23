@@ -12,12 +12,14 @@ class Singleton
    static Singleton *instance;
    int salaID;
    int load;
+   int timer;
 
    // Private constructor so that no objects can be created.
    Singleton()
    {
       salaID = 1; // Contador de ID de las salas
       load = 0;   // Contador del mineral recogido
+      timer = 0;  // Temporizador de la partida
    }
 
 public:
@@ -47,6 +49,16 @@ public:
    int getLoad()
    {
       return this->load;
+   }
+
+   int getTimer()
+   {
+      return this->timer;
+   }
+
+   void setTimer(int ptimer)
+   {
+      this->timer = ptimer;
    }
 };
 

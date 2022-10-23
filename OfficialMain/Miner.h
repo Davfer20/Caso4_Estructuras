@@ -147,7 +147,7 @@ public:
                 
             } else if ((currentChamberNode->izquierdo != NULL ) && !path)
             {
-                if (currentChamberNode->derecho->content->ifValid())
+                if (currentChamberNode->izquierdo->content->ifValid())
                 {
                     currentChamberNode = currentChamberNode->izquierdo;
                     distance = currentChamber->getDistance();

@@ -17,7 +17,9 @@ public:
     bool mineOrgGodeep()
     {
     }
-    bool choosePath() = 0;
+    bool choosePath() 
+    {
+    }
     string getName()
     {
     }
