@@ -11,12 +11,12 @@ class NodeAVL
 {
 public:
     int dato;
-    T *content; 
+    T *content;
     int fe; // factor de equilibrio
     NodeAVL *izquierdo;
-    NodeAVL*derecho;
+    NodeAVL *derecho;
 
-    NodeAVL(int dato, T *content)
+    NodeAVL(int dato, T *content) // Node containing infomration about itself
     {
         this->content = content;
         this->dato = dato;

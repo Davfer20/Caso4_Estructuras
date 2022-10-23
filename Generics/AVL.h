@@ -15,37 +15,38 @@ private:
     int lastSearch;
 
 public:
-    AVL()
+    AVL() // The tree constructor
     {
         this->raiz = NULL;
         this->lastSearch = 0;
     }
-    void countSearh(int key, NodeAVL<T> *raiz)
+    void countSearh(int key, NodeAVL<T> *raiz) // Searhes tree by potencial
     {
         this->lastSearch = 0;
         searh(key, raiz);
     }
-    NodeAVL<T> *searh(int key, NodeAVL<T> *raiz)
+    NodeAVL<T> *searh(int key, NodeAVL<T> *raiz) // Checks all nodes to kind the specific key
     {
         this->lastSearch += 1;
-        if (raiz == NULL)
+        if (raiz == NULL) // Position wasn't founded
         {
             return NULL;
         }
-        else if (raiz->dato == key)
+        else if (raiz->dato == key) // Psotion founded
         {
             return raiz;
         }
-        else if (raiz->dato < key)
+        else if (raiz->dato < key) // Uses recursion depending on the side of the tree changing the root
         {
             return searh(key, raiz->derecho);
         }
-        else if (raiz->dato > key)
+        else if (raiz->dato > key) // Uses recursion to look the key on the left side
         {
             return searh(key, raiz->izquierdo);
         }
     }
-    int getFE(NodeAVL<T> *NodeAVL)
+
+    int getFE(NodeAVL<T> *NodeAVL) // Checks the balance factor
     {
         if (NodeAVL == NULL)
         {
@@ -57,31 +58,30 @@ public:
         }
     }
 
-    NodeAVL<T> *rotacionIzquierda(NodeAVL<T> *pNodeAVL)
+    NodeAVL<T> *rotacionIzquierda(NodeAVL<T> *pNodeAVL) // Makes the specific rotation
     {
-        NodeAVL<T> *aux = pNodeAVL->izquierdo;
-        pNodeAVL->izquierdo = aux->derecho;
+        NodeAVL<T> *aux = pNodeAVL->izquierdo; // Sets the left side on a temporal variable
+        pNodeAVL->izquierdo = aux->derecho;    // The left side is replaces with the right side of aux. (aux was the original left side)
 
-        aux->derecho = pNodeAVL;
+        aux->derecho = pNodeAVL; // The NULL node now is filled with the parameter node
 
-        pNodeAVL->fe = max(this->getFE(pNodeAVL->izquierdo), this->getFE(pNodeAVL->derecho)) + 1;
-        aux->fe = max(this->getFE(aux->izquierdo), this->getFE(aux->derecho)) + 1;
-
+        pNodeAVL->fe = max(this->getFE(pNodeAVL->izquierdo), this->getFE(pNodeAVL->derecho)) + 1; // Takes the grater value of balance factor and sets it on node AVL. It would be saving an integer. If the integer is negative means the left side is bigger
+        aux->fe = max(this->getFE(aux->izquierdo), this->getFE(aux->derecho)) + 1;                // Takes the greater value of balace but from the aux vatiable
         return aux;
     }
     NodeAVL<T> *rotacionDerecha(NodeAVL<T> *pNodeAVL)
     {
-        NodeAVL<T> *aux = pNodeAVL->derecho;
-        pNodeAVL->derecho = aux->izquierdo;
+        NodeAVL<T> *aux = pNodeAVL->derecho; // Sets the right side on a temporal variable
+        pNodeAVL->derecho = aux->izquierdo;  // The right side is replaces with the left side of aux. (Aux was the original right side)
 
-        aux->izquierdo = pNodeAVL;
+        aux->izquierdo = pNodeAVL; // The NULL node now is filled with the parameter node
 
-        pNodeAVL->fe = max(this->getFE(pNodeAVL->izquierdo), this->getFE(pNodeAVL->derecho)) + 1;
+        pNodeAVL->fe = max(this->getFE(pNodeAVL->izquierdo), this->getFE(pNodeAVL->derecho)) + 1; // Checks the balance looking for the bigger side. The result might be an integer positive or negative.
         aux->fe = max(this->getFE(aux->izquierdo), this->getFE(aux->derecho)) + 1;
 
         return aux;
     }
-    NodeAVL<T> *rotacionDobleIzquierda(NodeAVL<T> *pNodeAVL)
+    NodeAVL<T> *rotacionDobleIzquierda(NodeAVL<T> *pNodeAVL) // Makes a double rigth rotation
     {
         NodeAVL<T> *aux;
 
@@ -90,7 +90,7 @@ public:
 
         return aux;
     }
-    NodeAVL<T> *rotacionDobleDerecha(NodeAVL<T> *pNodeAVL)
+    NodeAVL<T> *rotacionDobleDerecha(NodeAVL<T> *pNodeAVL) // Makes a double left rotation
     {
         NodeAVL<T> *aux;
 
@@ -169,7 +169,7 @@ public:
 
         return nuevoPadre;
     }
-    void add(int key, T* Pcontent)
+    void add(int key, T *Pcontent)
     {
         NodeAVL<T> *nuevo = new NodeAVL<T>(key, Pcontent);
 

@@ -44,6 +44,7 @@ public:
         this->state = 0;
         this->cooldown = 0;
         this->currentChamber = NULL;
+
     }
 
     string getMname()
