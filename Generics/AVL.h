@@ -81,66 +81,66 @@ public:
 
         return aux;
     }
-    NodeAVL<T> *rotacionDobleIzquierda(NodeAVL<T> *pNodeAVL) // Makes a double rigth rotation
+    NodeAVL<T> *rotacionDobleIzquierda(NodeAVL<T> *pNodeAVL) // Makes a left rigth rotation
     {
         NodeAVL<T> *aux;
 
-        pNodeAVL->izquierdo = this->rotacionDerecha(pNodeAVL->izquierdo);
-        aux = this->rotacionIzquierda(pNodeAVL);
+        pNodeAVL->izquierdo = this->rotacionDerecha(pNodeAVL->izquierdo); // Makes a left rigth rotation
+        aux = this->rotacionIzquierda(pNodeAVL);                          // With the result of the previos rotaiton makes another double left rotation
 
         return aux;
     }
-    NodeAVL<T> *rotacionDobleDerecha(NodeAVL<T> *pNodeAVL) // Makes a double left rotation
+    NodeAVL<T> *rotacionDobleDerecha(NodeAVL<T> *pNodeAVL) // Makes a double right rotation
     {
         NodeAVL<T> *aux;
 
-        pNodeAVL->derecho = this->rotacionIzquierda(pNodeAVL->derecho);
-        aux = this->rotacionDerecha(pNodeAVL);
+        pNodeAVL->derecho = this->rotacionIzquierda(pNodeAVL->derecho); // Makes a right rotation
+        aux = this->rotacionDerecha(pNodeAVL);                          // With the result of the previos rotaiton makes another double rigth rotation
 
         return aux;
     }
-    NodeAVL<T> *addNodeAVL(NodeAVL<T> *nuevo, NodeAVL<T> *subArbol)
-    {
+    NodeAVL<T> *addNodeAVL(NodeAVL<T> *nuevo, NodeAVL<T> *subArbol) // Adds the node on the tree
+    {                                                               // The parameters are the new node and the previous root
         NodeAVL<T> *nuevoPadre = subArbol;
 
         if (nuevo->dato < subArbol->dato)
         {
-            if (subArbol->izquierdo == NULL)
+            if (subArbol->izquierdo == NULL) // Validates if the data is smaller to locate it on the rigth position
             {
                 subArbol->izquierdo = nuevo;
             }
             else
             {
-                subArbol->izquierdo = this->addNodeAVL(nuevo, subArbol->izquierdo);
+                subArbol->izquierdo = this->addNodeAVL(nuevo, subArbol->izquierdo); // Adds the node on the new created side
 
-                int balance = this->getFE(subArbol->izquierdo) - this->getFE(subArbol->derecho);
+                int balance = this->getFE(subArbol->izquierdo) - this->getFE(subArbol->derecho); // Checks the correct balance
 
                 if (balance == 2)
                 {
                     if (nuevo->dato < subArbol->izquierdo->dato)
                     {
-                        nuevoPadre = this->rotacionIzquierda(subArbol);
+                        nuevoPadre = this->rotacionIzquierda(subArbol); // If the balance is wrong makes a left turn
                     }
                     else
                     {
-                        nuevoPadre = this->rotacionDobleIzquierda(subArbol);
+                        nuevoPadre = this->rotacionDobleIzquierda(subArbol); // If the balance is wrong makes a left turn
                     }
                 }
             }
         }
-        else if (nuevo->dato > subArbol->dato)
+        else if (nuevo->dato > subArbol->dato) // Validates if the data is bigger to locate it on the rigth position
         {
             if (subArbol->derecho == NULL)
             {
                 subArbol->derecho = nuevo;
             }
-            else
+            else // If the rigth node is different to NULL has to locate on a differnet place
             {
-                subArbol->derecho = this->addNodeAVL(nuevo, subArbol->derecho);
+                subArbol->derecho = this->addNodeAVL(nuevo, subArbol->derecho); // Places the new node on the rigth
 
-                int balance = this->getFE(subArbol->derecho) - this->getFE(subArbol->izquierdo);
+                int balance = this->getFE(subArbol->derecho) - this->getFE(subArbol->izquierdo); // Checkes the balance
 
-                if (balance == 2)
+                if (balance == 2) // Takes decition based on the tree balance
                 {
                     if (nuevo->dato > subArbol->derecho->dato)
                     {
@@ -165,11 +165,12 @@ public:
         else
         {
             subArbol->fe = max(this->getFE(subArbol->izquierdo), this->getFE(subArbol->derecho)) + 1;
+            // Saves the bigger balance factor
         }
 
         return nuevoPadre;
     }
-    void add(int key, T *Pcontent)
+    void add(int key, T *Pcontent) // Adds the data on the node, if there is no data simply add and saves the root
     {
         NodeAVL<T> *nuevo = new NodeAVL<T>(key, Pcontent);
 
