@@ -25,8 +25,7 @@ protected:
     vector<int> disPaths;
     string action;
     Mina *currentMina;
-
-    vector<IStrat> mStrat;
+    IStrat *mStrat;
 
     int inventory;
     int cap;
@@ -36,7 +35,7 @@ protected:
     int cooldown;
 
 public:
-    IMiner(vector<IStrat> pmStrat, Mina *Pmina)
+    IMiner(IStrat *pmStrat, Mina *Pmina)
     {
         this->currentMina = Pmina;
         this->currentSala = Pmina->getSalasList()->find(0);
@@ -79,6 +78,25 @@ public:
 
     void exploring() // State 0
     {
+        this->action = "Explorando la sala " + to_string(currentSala->getID());
+        if (currentSala->getIfTunel())
+        {
+            if (mStrat->enterTunel())
+            {
+                this->state = 1;
+                this->currentChamberNode = currentSala->getTunel()->getNodeRaiz();
+                this->deepdis = 0;
+            }
+        }
+        else
+        {
+            disPaths = currentSala->availablePaths();
+            this->currentSala = currentSala->getSalaDir(mStrat->chooseSala(disPaths));
+        }
+    }
+
+    void mining() // State 0
+    {
         if (cooldown != 0)
         {
             cooldown -= 1;
@@ -92,7 +110,7 @@ public:
         int distance;
 
         this->action = "Explorando el tunel " + to_string(currentSala->getID()) + ", prufundidad: " + to_string(deep);
-        if (deep == 1 || !mStrat[0].mineOrgGodeep(deep)) // Posibilidad de seguir adentrandose
+        if (deep == 1 || !mStrat->mineOrgGodeep(deep)) // Posibilidad de seguir adentrandose
         {
 
             int paths = 0;
@@ -112,9 +130,10 @@ public:
                 deepdis = 0;
                 this->action = "Volviendo a la sala...";
                 this->state = 2;
-            } else
+            }
+            else
             {
-                int path = mStrat[0].choosePath(paths);
+                int path = mStrat->choosePath(paths);
                 currentChamberNode = path ? currentChamberNode->izquierdo : currentChamberNode->derecho;
             }
             cooldown = distance / this->speed;

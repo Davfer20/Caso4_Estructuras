@@ -14,6 +14,15 @@ int main()
     Mina *mina1 = new Mina();
     mina1->addToSalap();
     mina1->addSalasTotal();
+    
+    int anwser;
+    cout << "Presiones <Enter> para comenzar Player1" << endl;
+    cin >> anwser;
+    
+    cout << "Seleccione al primer Minero" << endl;
+
+
+
     Miner *minero1 = new Miner(0, 0, mina1);
     Miner *minero2 = new Miner(0, 0, mina1);
     Miner *minero3 = new Miner(0, 0, mina1);
@@ -66,6 +75,7 @@ int main()
              << endl
              << endl;
         count += 1;
+        var->setTimer(count);
         pthread_delay_np(&sec);
     }
 
