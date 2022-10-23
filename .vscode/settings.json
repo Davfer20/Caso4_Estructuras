@@ -45,7 +45,8 @@
         "streambuf": "cpp",
         "typeinfo": "cpp",
         "thread": "cpp",
-        "semaphore": "cpp"
+        "semaphore": "cpp",
+        "carrier": "cpp"
     },
     "python.analysis.typeCheckingMode": "basic"
 }

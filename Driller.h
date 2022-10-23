@@ -1,9 +1,4 @@
 #include "IMiner.h"
-#include "Sala.h"
-#include "Mina.h"
-#include "List.h"
-#include <string.h>
-#include <iostream>
 
 #ifndef DRILLER
 
@@ -17,7 +12,7 @@ private:
     bool ability;
 
 public:
-    Driller(int PmStrat, Mina *Pmina) : IMiner(PmStrat, Pmina)
+    Driller(vector<IStrat> pmStrat, Mina *Pmina) : IMiner(pmStrat, Pmina)
     {
         this->Mname = "Driller";
         this->speed = 7;
@@ -25,9 +20,9 @@ public:
         this->ability = true;
     }
 
-    void mining() override {
-        
+    void mining() override
+    {
     }
 };
 
-#endif DRILLER
+#endif
