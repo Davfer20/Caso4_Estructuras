@@ -14,23 +14,71 @@ int main()
     Mina *mina1 = new Mina();
     mina1->addToSalap();
     mina1->addSalasTotal();
-    
+
     int anwser;
     cout << "Presiones <Enter> para comenzar Player1" << endl;
     cin >> anwser;
-    
-    cout << "Seleccione al primer Minero" << endl;
 
+    vector<Miner *> mineros1;
+    int cant = 3;
+    while (cant)
+    {
+        while (true)
+        {
+            int type = 0;
+            cout << "1. Explorador" << endl
+                 << "2. Topo" << endl
+                 << "3. Carguero" << endl
+                 << "Seleccione al primer Minero" << endl;
+            cin >> anwser;
+            switch (anwser)
+            {
+            case 1:
+                type = 1;
+                break;
+            case 2:
+                type = 2;
+                break;
+            case 3:
+                type = 3;
+                break;
+            default:
+                break;
+            }
+            if (type)
+            {
+                break;
+            }
+        }
 
+        while (true)
+        {
+            int strat = 0;
+            cout << "1. Tryhard" << endl
+                 << "2. A la segura" << endl
+                 << "3. Al azar" << endl
+                 << "Seleccione la estrategia del primer Minero" << endl;
+            cin >> anwser;
+            switch (anwser)
+            {
+            case 1:
 
-    Miner *minero1 = new Miner(0, 0, mina1);
-    Miner *minero2 = new Miner(0, 0, mina1);
-    Miner *minero3 = new Miner(0, 0, mina1);
-
-    vector<Miner *> mineros;
-    mineros.push_back(minero1);
-    mineros.push_back(minero2);
-    mineros.push_back(minero3);
+                break;
+            case 2:
+                strat = 2;
+                break;
+            case 3:
+                strat = 3;
+                break;
+            default:
+                break;
+            }
+            if (strat)
+            {
+                break;
+            }
+        }
+    }
 
     int count = 0;
     int puntaje;
@@ -40,9 +88,9 @@ int main()
         cout << "Tiempo restante: " << 90 - count << endl;
         puntaje = var->getLoad();
         cout << "Material recogido: " << puntaje << endl;
-        for (int i = 0; i < mineros.size(); i++)
+        for (int i = 0; i < mineros1.size(); i++)
         {
-            Miner *Nminer = mineros[i];
+            Miner *Nminer = mineros1[i];
 
             Nminer->getState();
             switch (Nminer->getState())
