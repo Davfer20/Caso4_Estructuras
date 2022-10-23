@@ -12,13 +12,10 @@ public:
     Explorer(vector<IStrat> pmStrat, Mina *Pmina) : IMiner(pmStrat, Pmina)
     {
         this->Mname = "Explorer";
-        this->speed = 7;
-        this->cap = 15;
+        this->speed = 20;
+        this->cap = 8;
     }
 
-    void mining() override
-    {
-    }
 };
 
 #endif

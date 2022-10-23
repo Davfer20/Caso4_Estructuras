@@ -20,7 +20,7 @@ public:
         this->ability = true;
     }
 
-    void mining() override
+    void mining() 
     {
     }
 };
