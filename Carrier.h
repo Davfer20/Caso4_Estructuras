@@ -16,9 +16,6 @@ public:
         this->cap = 40;
     }
 
-    void mining() 
-    {
-    }
 };
 
 #endif
