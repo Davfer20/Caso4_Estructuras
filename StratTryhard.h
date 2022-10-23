@@ -10,15 +10,39 @@ public:
     }
     int chooseSala(vector<int> AvailPaths)
     {
+        int rDire;
+        int max = AvailPaths.size();
+        rDire = rand();
+        rDire %= max;              // Hace random del tamaño para escojer
+        rDire = AvailPaths[rDire]; // Se guarda el valor en rDire
+        return rDire;
     }
     bool enterTunel()
     {
+        return true;
     }
-    bool mineOrgGodeep()
+    bool mineOrgGodeep(int pDeep)
+    {
+        bool option = false;
+        Singleton *var = var->getInstance();
+        int pTime = var->getTimer();
+
+        if (pTime < 20)
+        {
+            option = true;
+        }
+
+        if (pDeep > 450)
+        {
+            option = true;
+        }
+        return option;
+    }
+    bool choosePath(int Opcion)
     {
     }
-    bool choosePath() = 0;
     string getName()
     {
+        return "Tryhard strategy";
     }
 };
