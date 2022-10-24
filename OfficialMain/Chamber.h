@@ -14,7 +14,6 @@ private:
     int potential;  // Distancia * Mineral
     int distance;   // Distancia al Chamber anterior
     int mineral;    // Mineral actual en el Chamber
-    int totMineral; // Mineral generado en el Chamber
     bool valid;     // En caso de vaciarse para a ser invalid
 
 public:
@@ -38,7 +37,6 @@ public:
         this->mineral = getRandMineral();
         this->potential = this->distance * this->mineral;
         this->valid = true;
-        this->totMineral = this->mineral;
     }
 
     // Retorna el potencial
@@ -69,11 +67,6 @@ public:
         return 1;
     }
 
-    // Retorna informacion del mineral en el Chamber
-    string getMaterial()
-    {
-        return to_string(this->mineral) + "/" + to_string(this->totMineral);
-    }
 };
 
 #endif

@@ -13,12 +13,16 @@
 
 using namespace std;
 
+#define TIME 120
+#define CANTSALAS 20
+#define CANTMINER 10
+
 struct timespec sec = {1, 0}; // Pausa de un segundo
 
 int main()
 {
     Singleton *var = var->getInstance();
-    Mina *mina = new Mina();
+    Mina *mina = new Mina(CANTSALAS);
     mina->addToSalap();
     mina->addSalasTotal();
     
@@ -27,15 +31,13 @@ int main()
 
     vector<IMiner *> mineros1;
     int cant = 1;
-    while (cant !=4)
+    while (cant != CANTMINER + 1)
     {
         IMiner *minero1;
         while (true)
         {
             int type = 0;
             cout << endl
-                 << endl
-                 << endl
                  << "1. Explorador" << endl
                  << "2. Topo" << endl
                  << "3. Carguero" << endl
@@ -69,8 +71,6 @@ int main()
         {
             int strat = 0;
             cout << endl
-                 << endl
-                 << endl
                  << "1. Tryhard" << endl
                  << "2. A la segura" << endl
                  << "3. Al azar" << endl
@@ -103,7 +103,7 @@ int main()
         ++cant;
     }
 
-    int count = 90;
+    int count = TIME;
     int puntaje1;
     while (count >= 0)
     {
@@ -125,10 +125,12 @@ int main()
                 Nminer->mining();
                 break;
             case 2:
+                Nminer->gettingBack();
+                break;
+            case 3:
                 Nminer->unloading();
                 break;
             default:
-                Nminer->death();
                 break;
             }
 
@@ -137,8 +139,7 @@ int main()
                  << "           "
                  << "Inventario: " << Nminer->getInventory() << "/" << Nminer->getCap() << endl
                  << "Estrategia: " << Nminer->getStrat() << endl
-                 << "Estado: " << Nminer->getAction() << endl
-                 << "Material en la recamara: " << Nminer->getMrlCurrentChamb() << endl;
+                 << "Estado: " << Nminer->getAction() << endl;
         }
         // CLS Casero
         cout << endl
@@ -152,7 +153,7 @@ int main()
         pthread_delay_np(&sec);
     }
 
-    Mina *mina2 = new Mina();
+    Mina *mina2 = new Mina(CANTSALAS);
     mina2->addToSalap();
     mina2->addSalasTotal();
 
@@ -166,7 +167,7 @@ int main()
 
     vector<IMiner *> mineros2;
     cant = 1;
-    while (cant !=4)
+    while (cant != CANTMINER + 1)
 
     {
         IMiner *minero2;
@@ -174,8 +175,6 @@ int main()
         {
             int type = 0;
             cout << endl
-                 << endl
-                 << endl
                  << "1. Explorador" << endl
                  << "2. Topo" << endl
                  << "3. Carguero" << endl
@@ -209,8 +208,6 @@ int main()
         {
             int strat = 0;
             cout << endl
-                 << endl
-                 << endl
                  << "1. Tryhard" << endl
                  << "2. A la segura" << endl
                  << "3. Al azar" << endl
@@ -243,8 +240,7 @@ int main()
         ++cant;
     }
 
-
-    count = 90;
+    count = TIME;
     int puntaje2;
     while (count >= 0)
     {
@@ -278,8 +274,7 @@ int main()
                  << "           "
                  << "Inventario: " << Nminer->getInventory() << "/" << Nminer->getCap() << endl
                  << "Estrategia: " << Nminer->getStrat() << endl
-                 << "Estado: " << Nminer->getAction() << endl
-                 << "Material en la recamara: " << Nminer->getMrlCurrentChamb() << endl;
+                 << "Estado: " << Nminer->getAction() << endl;
         }
         // CLS Casero
         cout << endl

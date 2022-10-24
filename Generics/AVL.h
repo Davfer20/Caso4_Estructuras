@@ -1,4 +1,5 @@
 #include "NodeAVL.h"
+#include "../OfficialMain/Chamber.h"
 #include <iostream>
 
 using namespace std;
@@ -203,6 +204,31 @@ public:
             this->inOrden(pNodeAVL->derecho);
         }
     }
+
+    NodeAVL<Chamber> *searhPath(int key, NodeAVL<Chamber> *raiz) // Valida Si se puede llegar al chamber 
+    {
+        if (raiz == NULL) // Position wasn't founded
+        {
+            return NULL;
+        } 
+        else if(!raiz->content->ifValid())
+        {
+            return NULL;
+        }
+        else if (raiz->dato == key) // Psotion founded
+        {
+            return raiz;
+        }
+        else if (raiz->dato < key) // Uses recursion depending on the side of the tree changing the root
+        {
+            return searh(key, raiz->derecho);
+        }
+        else if (raiz->dato > key) // Uses recursion to look the key on the left side
+        {
+            return searh(key, raiz->izquierdo);
+        }
+    }
+
 };
 
 #endif
