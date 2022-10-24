@@ -1,8 +1,12 @@
 #include "IStrat.h"
 
+#ifndef STRATR
+
+#define STRATR 1
+
 class StratRandom : public IStrat
 {
-private:
+
 public:
     StratRandom()
     {
@@ -17,7 +21,7 @@ public:
         return rDire;
     }
 
-    bool enterTunel()
+    bool enterTunel(NodeAVL<Chamber> *chamberNode)
     {
         int rDire;
         return rDire = (rand() % 2); // Devuelve bool con 50% de probabilidad
@@ -32,13 +36,15 @@ public:
         if (Opcion == 3)
         {
             int rDire;
-            Opcion = ((rand() % 2) + 1);
+            Opcion = rand() % 2 + 1;
         }
 
-        return Opcion;
+        return Opcion - 1; 
     }
     string getName()
     {
         return "Random Stategy";
     }
 };
+
+#endif

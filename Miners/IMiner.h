@@ -1,12 +1,12 @@
-#include "OfficialMain\Sala.h"
-#include "OfficialMain\Mina.h"
-#include "Generics\NodeAVL.h"
-#include "Generics\List.h"
-#include "Global\Singleton.h"
-#include "OfficialMain\Chamber.h"
+#include "..\OfficialMain\Sala.h"
+#include "..\OfficialMain\Mina.h"
+#include "..\OfficialMain\Chamber.h"
+#include "..\Generics\NodeAVL.h"
+#include "..\Generics\List.h"
+#include "..\Global\Singleton.h"
+#include "..\Strats\IStrat.h"
 #include <string>
 #include <iostream>
-#include "IStrat.h"
 
 #ifndef IMINER
 
@@ -35,16 +35,14 @@ protected:
     int cooldown;
 
 public:
-    IMiner(IStrat *pmStrat, Mina *Pmina)
+    IMiner(Mina *Pmina)
     {
         this->currentMina = Pmina;
         this->currentSala = Pmina->getSalasList()->find(0);
         this->inventory = 0;
-        this->mStrat = pmStrat;
         this->state = 0;
         this->cooldown = 0;
         this->currentChamber = NULL;
-
     }
 
     string getMname()
@@ -77,23 +75,30 @@ public:
         return this->currentSala;
     }
 
+    void setStrat(IStrat *pStrat)
+    {
+        this->mStrat = pStrat;
+    }
+    string getStrat()
+    {
+        return this->mStrat->getName();
+    }
+
     void exploring() // State 0
     {
         this->action = "Explorando la sala " + to_string(currentSala->getID());
         if (currentSala->getIfTunel())
         {
-            if (mStrat->enterTunel())
+            this->currentChamberNode = currentSala->getTunel()->getNodeRaiz();
+            if (mStrat->enterTunel(currentChamberNode))
             {
                 this->state = 1;
-                this->currentChamberNode = currentSala->getTunel()->getNodeRaiz();
                 this->deepdis = 0;
+                return;
             }
         }
-        else
-        {
-            disPaths = currentSala->availablePaths();
-            this->currentSala = currentSala->getSalaDir(mStrat->chooseSala(disPaths));
-        }
+        disPaths = currentSala->availablePaths();
+        this->currentSala = currentSala->getSalaDir(mStrat->chooseSala(disPaths));
     }
 
     void mining() // State 0
@@ -129,15 +134,17 @@ public:
                 this->currentChamberNode = currentSala->getTunel()->getNodeRaiz();
                 distance = deepdis;
                 deepdis = 0;
-                this->action = "Volviendo a la sala...";
                 this->state = 2;
             }
             else
             {
                 int path = mStrat->choosePath(paths);
                 currentChamberNode = path ? currentChamberNode->izquierdo : currentChamberNode->derecho;
+                distance = currentChamberNode->content->getDistance();
+                deepdis += distance;
             }
             cooldown = distance / this->speed;
+            currentChamber = currentChamberNode->content;
         }
         else
         {
@@ -148,35 +155,43 @@ public:
             this->currentChamberNode = currentSala->getTunel()->getNodeRaiz();
             distance = deepdis;
             deepdis = 0;
-            this->action = "Volviendo a la sala con material...";
             cooldown = distance / this->speed;
+            cooldown /= 2;
             this->state = 2;
+            currentChamber = currentChamberNode->content;
         }
     }
 
-    void unloading() // State 2
+    void gettingBack() // State 2
     {
+        this->currentChamber = NULL;
+        this->action = "Volviendo a la sala con material...";
         if (cooldown != 0)
         {
             cooldown -= 1;
             return;
         }
+        this->state = 3;
+        deepdis = 0;
+    }
+    void unloading() // State 3
+    {
 
         this->action = "Descargando inventario " + to_string(currentSala->getID());
         Singleton *var = var->getInstance();
         var->addLoad(this->inventory);
         this->inventory = 0;
 
-        this->state = 1;
-        if (rand() % 2)
+        this->state = 0;
+        if (mStrat->enterTunel(currentChamberNode))
         {
-            this->currentChamber = NULL;
-            this->state = 0;
+            this->state = 1;
         }
     }
 
     void death() // State 3 x_x
     {
+        this->action = "Ha muerto; 2022 - 2022";
     }
 
     string getMrlCurrentChamb()

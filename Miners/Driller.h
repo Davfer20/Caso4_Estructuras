@@ -12,7 +12,7 @@ private:
     bool ability;
 
 public:
-    Driller(vector<IStrat> pmStrat, Mina *Pmina) : IMiner(pmStrat, Pmina)
+    Driller(Mina *Pmina) : IMiner(Pmina)
     {
         this->Mname = "Driller";
         this->speed = 7;

@@ -9,7 +9,7 @@ using namespace std;
 class Carrier : public IMiner
 {
 public:
-    Carrier(vector<IStrat> pmStrat, Mina *Pmina) : IMiner(pmStrat, Pmina)
+    Carrier(Mina *Pmina) : IMiner(Pmina)
     {
         this->Mname = "Carrier";
         this->speed = 10;

@@ -60,6 +60,12 @@ public:
    {
       this->timer = ptimer;
    }
+
+   void resetSingle() {
+      this->timer = 0;
+      this->salaID = 1;
+      this->load = 0;
+   }
 };
 
 #endif
