@@ -131,7 +131,6 @@ public:
 
             if (!paths)
             { // Devolverse al inicio si ya no hay camino
-                this->currentChamberNode = currentSala->getTunel()->getNodeRaiz();
                 distance = deepdis;
                 deepdis = 0;
                 this->state = 2;
@@ -152,11 +151,12 @@ public:
             {
                 this->inventory += currentChamber->pickMineral();
             }
-            this->currentChamberNode = currentSala->getTunel()->getNodeRaiz();
             distance = deepdis;
             deepdis = 0;
+
             cooldown = distance / this->speed;
             cooldown /= 2;
+
             this->state = 2;
             currentChamber = currentChamberNode->content;
         }
@@ -164,7 +164,10 @@ public:
 
     void gettingBack() // State 2
     {
+        death();
         this->currentChamber = NULL;
+        this->currentChamberNode = currentSala->getTunel()->getNodeRaiz();
+
         this->action = "Volviendo a la sala con material...";
         if (cooldown != 0)
         {
@@ -189,20 +192,13 @@ public:
         }
     }
 
-    void death() // State 3 x_x
+    void death() // State 4 x_x
     {
-        this->action = "Ha muerto; 2022 - 2022";
-    }
-
-    string getMrlCurrentChamb()
-    { // 20/14
-        string resul = "Ø";
-        if (this->currentChamber != NULL)
+        if (currentSala->getTunel()->getChambers()->searhPath(currentChamberNode->dato, currentSala->getTunel()->getNodeRaiz()) == NULL)
         {
-            resul = this->currentChamber->getMaterial();
+            this->action = "Ha muerto; 2022 - 2022";
+            this->state = 4;
         }
-        return resul;
     }
 };
-
 #endif

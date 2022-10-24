@@ -1,6 +1,5 @@
 #include "Sala.h"
 #include "..\Generics\List.h"
-#include "..\Global\Constants.h"
 
 #ifndef MINA
 
@@ -16,14 +15,14 @@ private:
 
 public:
     // Contructor de Mina con Sala Principal
-    Mina()
+    Mina(int CantSalas)
     {
         this->Salas = new List<Sala>();
         Sala *Sprincipal = new Sala();
         this->SalaP = Sprincipal;
         // Salas.push_back(SalaP);
         this->Salas->add(SalaP);
-        this->salasT = 16;
+        this->salasT = CantSalas;
         this->salasT -= 1;
     }
 
