@@ -9,7 +9,7 @@ using namespace std;
 class Explorer : public IMiner
 {
 public:
-    Explorer(vector<IStrat> pmStrat, Mina *Pmina) : IMiner(pmStrat, Pmina)
+    Explorer(Mina *Pmina) : IMiner(Pmina)
     {
         this->Mname = "Explorer";
         this->speed = 20;

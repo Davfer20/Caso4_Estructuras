@@ -1,9 +1,11 @@
 #include "IStrat.h"
 
+#ifndef STRATT
+
+#define STRATT 1
+
 class StratTryhard : public IStrat
 {
-private:
-    /* Atributos */
 public:
     StratTryhard()
     {
@@ -13,13 +15,27 @@ public:
         int rDire;
         int max = AvailPaths.size();
         rDire = rand();
-        rDire %= max;              // Hace random del tamaño para escojer
-        rDire = AvailPaths[rDire]; // Se guarda el valor en rDire
+        rDire %= max;
+        rDire = AvailPaths[rDire];
         return rDire;
     }
-    bool enterTunel()
+    bool enterTunel(NodeAVL<Chamber> *chamberNode)
     {
-        return true;
+        if (chamberNode->derecho != NULL)
+        {
+            if (chamberNode->derecho->content->ifValid())
+            {
+                return true;
+            }
+        }
+        if (chamberNode->izquierdo != NULL)
+        {
+            if (chamberNode->izquierdo->content->ifValid())
+            {
+                return true;
+            }
+        }
+        return false;
     }
     bool mineOrgGodeep(int pDeep)
     {
@@ -27,12 +43,7 @@ public:
         Singleton *var = var->getInstance();
         int pTime = var->getTimer();
 
-        if (pTime < 20)
-        {
-            option = true;
-        }
-
-        if (pDeep > 450)
+        if (pTime < 10 || pDeep > 3)
         {
             option = true;
         }
@@ -40,14 +51,11 @@ public:
     }
     bool choosePath(int Opcion)
     {
-        {
         if (Opcion == 3)
         {
             Opcion = 1;
         }
-
-        return Opcion;
-    }
+        return Opcion - 1;
     }
 
     string getName()
@@ -55,3 +63,5 @@ public:
         return "Tryhard strategy";
     }
 };
+
+#endif
